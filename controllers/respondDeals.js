@@ -19,5 +19,5 @@ exports.getDeals = (req, res, next) => {
 }
 
 exports.dealNotFound = (req, res) => {
-    res.status(404).send(`No merchant found with id: ${req.params.merchantId}`);
+    res.status(204).send(`No merchant found with id: ${req.params.merchantId}`);
 }
