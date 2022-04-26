@@ -25,8 +25,16 @@ class Merchant {
      * Adds a new host to the array
      * @param {String} host - hostname to add
      */
-    addHost(host) {
-        this.hosts.push(host);
+    addHost(hostName) {
+        if (!this.hosts) {
+            this.hosts = [hostName];
+        } else {
+            for (const host of this.hosts) {
+                if (host === hostName) return false;
+            }
+            this.hosts.push(hostName);
+        }
+        return true;
     }
 }
 
