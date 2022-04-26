@@ -1,21 +1,9 @@
-const data = require('../models/dealData');
+const getMerchantByName = require('../data/db-access');
 
-exports.getDeals = (req, res, next) => {
-    let reqId = req.params.merchantId;
-    console.log(`request id: ${reqId}`);
-    let found = false;
-    for (const merchant of data) {
-        console.log(`Data Merchant Id: ${merchant.id}`);
-        console.log(merchant.id === reqId);
-        if (merchant.id == reqId) {
-            res.json(merchant);
-            found = true;
-            break;
-        }
-    };
-    if (!found) {
-        next()
-    }
+exports.getDeals = async (req, res, next) => {
+    let reqName = req.params.name;
+    let merchant = await getMerchantByName(reqName);
+    res.json(merchant);
 }
 
 exports.dealNotFound = (req, res) => {

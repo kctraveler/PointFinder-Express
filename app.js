@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const indexRouter = require('./routes/index');
-const dealRouter = require('./routes/deals');
+const dealRouter = require('./routes/deal');
 
 const app = express();
 
@@ -19,6 +19,6 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/deals', dealRouter);
+app.use('/deal', dealRouter);
 
 module.exports = app;
