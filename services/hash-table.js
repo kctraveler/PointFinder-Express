@@ -22,21 +22,20 @@ class HashTable {
      * @param {String} key - String used as key in HashTable 
      */
     _hash(key) {
-        // let hash = 0;
-        // for (let i = 0; i < key.length; i++) {
-        //     hash += key.charCodeAt(i);
-        // }
-        // return hash % this.table.length;
+        let hash = 0;
+        for (let i = 0; i < key.length; i++) {
+            hash += key.charCodeAt(i);
+        }
+        return hash % this.table.length;
 
         /** Come back to this, need better hash function */
-        let len = key.length;
-        let h = 5381;
+        // let len = key.length;
+        // let h = 5381;
 
-        for (let i = 0; i < len; i++) {
-            h = h * 33 ^ key.charCodeAt(i)
-        }
-        //console.log((h >>> 0));
-        return (h >>> 0) % this.table.length;
+        // for (let i = 0; i < len; i++) {
+        //     h = h * 33 ^ key.charCodeAt(i)
+        // }
+        // return (h >>> 0) % this.table.length;
     }
 
     /**
@@ -115,14 +114,15 @@ class HashTable {
             } else if (this.table[i].isEmpty()) {
                 numEmpty++;
             } else {
-                numberCollisions++;
                 const collisionSize = this.table[i].size();
+                if (collisionSize > 1) numberCollisions++;
                 if (collisionSize > highestCollision) {
                     highestCollision = collisionSize;
                 }
             }
         }
         let results = {
+            Size: this.table.length,
             Empty: numEmpty,
             Highest_Collision: highestCollision,
             Number_Collisions: numberCollisions,

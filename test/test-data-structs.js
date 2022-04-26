@@ -50,7 +50,7 @@ https.get(americanDealUrl, res => {
 
 let listMerchants = (document) => {
     let merchantParents = document.querySelectorAll('[data-sort-type="byAlpha"]  li a');
-    let data = new HashTable(2048);
+    let data = new HashTable(10000);
     for (let i = 0; i < merchantParents.length; i++) {
         let current = merchantParents[i];
         let merchant = new Merchant();
