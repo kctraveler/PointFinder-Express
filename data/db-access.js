@@ -1,8 +1,15 @@
 let data = require('./db.js');
 
+
 let getMerchantByName = async (name) => {
-    let merch = await data;
-    return merch.get(name);
+    try {
+        let db = await data;
+        return db.get(name);
+    } catch (err) {
+        console.log(err);
+    }
 }
+
+
 
 module.exports = getMerchantByName;
