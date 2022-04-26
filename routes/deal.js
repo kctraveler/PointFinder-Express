@@ -1,3 +1,7 @@
+/**
+ * Router class for the /deal path
+ * @Author Shane Panchot
+ */
 const express = require('express');
 let router = express.Router();
 let respondDeals = require('../controllers/respondDeals')

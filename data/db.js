@@ -62,7 +62,8 @@ let _extractMerchants = async (parsedHTML) => {
     for (let i = 0; i < merchantParents.length; i++) {
         try {
             let current = merchantParents[i];
-            let href = current.attributes.href;
+            let href = 'https://www.aadvantageeshopping.com/' +
+                current.attributes.href;
             let name = current.querySelector('span.mn_merchName').childNodes[0]._rawText;
             let value;
             if (current.querySelector('span.mn_rebate.mn_deactivatedRebate')) {
