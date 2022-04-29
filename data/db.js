@@ -10,14 +10,7 @@ const Merchant = require('../models/merchant');
 const Deal = require('../models/deal');
 const axios = require('axios');
 const HTMLParser = require('node-html-parser');
-
-/**
- * List of URLs within objects.
- */
-const dealURLs = [{
-    airline: 'aal',
-    url: 'https://www.aadvantageeshopping.com/merchantlisthtml____.htm'
-}];
+const airlines = require('./airlines.js');
 
 /**
  * Gets the HTML as a string for the provided URL.
@@ -53,26 +46,34 @@ let _parseData = async (response) => {
  * Stores data as Merchant objects in a HashTable.
  * @private
  * @param {HTMLParser.document} parsedHTML - Parsed Document
- * @returns {HashTable} HashTable with Merchant Name as the keys.
+ * @param {Airline} airline - airline object containing url resources needed
+ * @param {HashTable} db - HashTable functioning as the DB
  */
-let _extractMerchants = async (parsedHTML) => {
+let _extractMerchants = async (parsedHTML, airline, db) => {
     let document = await parsedHTML;
+    let data = db;
     let merchantParents = document.querySelectorAll('[data-sort-type="byAlpha"]  li a');
-    let data = new HashTable(2048);
     for (let i = 0; i < merchantParents.length; i++) {
         try {
-            let current = merchantParents[i];
-            let href = 'https://www.aadvantageeshopping.com/' +
+            const current = merchantParents[i];
+            const href = airline.hrefRoot +
                 current.attributes.href;
-            let name = current.querySelector('span.mn_merchName').childNodes[0]._rawText;
+            const name = current.querySelector('span.mn_merchName').childNodes[0]._rawText;
             let value;
             if (current.querySelector('span.mn_rebate.mn_deactivatedRebate')) {
                 value = null;
+            } else if (current.querySelector('span.mn_rebate span.mn_instoreRebateWrap')) {
+                value = "In Store"
             } else {
                 value = current.querySelector('span.mn_rebate span.mn_sr-only').childNodes[0]._rawText;
             }
-            let deal = new Deal("AAL", value, href);
-            let merchant = new Merchant(name, null, [deal]);
+            const deal = new Deal(airline.airline, value, href);
+            let merchant = data.get(name);
+            if (merchant) {
+                merchant.addDeal(deal);
+            } else {
+                merchant = new Merchant(name, null, [deal])
+            }
             data.set(name, merchant);
         } catch (error) {
             console.error("Unprocessed Deal", error);
@@ -87,12 +88,15 @@ let _extractMerchants = async (parsedHTML) => {
  * @param {Array<Object>} dealURLs - objects should contain an airline and url.
  * @returns {HashTable<Merchant>} - Key Merchant Name, Value Merchant object.
  */
-let _merchantData = async (dealURLs) => {
-    let response = await _getDeals(dealURLs[0].url);
-    let parsedData = await _parseData(response);
-    let extractedData = await _extractMerchants(parsedData);
-    console.info(`Merchant Database Loaded`);
-    return extractedData;
+let _merchantData = async (airlines) => {
+    let db = new HashTable(10000);
+    for (const airline of airlines) {
+        let response = await _getDeals(airline.dealsUrl);
+        let parsedData = await _parseData(response);
+        await _extractMerchants(parsedData, airline, db);
+        console.info(`Merchant data added for: ${airline.airline}`);
+    }
+    return db;
 }
 
-module.exports = _merchantData(dealURLs);
+module.exports = _merchantData(airlines);
