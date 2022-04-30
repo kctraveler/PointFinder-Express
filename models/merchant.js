@@ -24,6 +24,7 @@ class Merchant {
     /**
      * Adds a new host to the array
      * @param {String} host - hostname to add
+     * @returns {Boolean} true if host was added
      */
     addHost(hostName) {
         if (!this.hosts) {
