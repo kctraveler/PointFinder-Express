@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const indexRouter = require('./routes/index');
-const dealRouter = require('./routes/deal');
+const dealRouter = require('./routes/merchant.js');
 
 const app = express();
 

@@ -7,7 +7,7 @@ const getMerchantByDomain = require('../data/db-index-host-access');
 /**
  * Primary middleware function. Looks up the merchant and sends json response if found.
  */
-exports.getDeals = async (req, res, next) => {
+exports.getMerchant = async (req, res, next) => {
     try {
         let reqDomain = req.params.lookupDomain;
         let merchant = await getMerchantByDomain(reqDomain);
@@ -24,6 +24,6 @@ exports.getDeals = async (req, res, next) => {
 /**
  * Send response 204 No Content if the merchant can't be found. 
  */
-exports.dealNotFound = (req, res) => {
+exports.merchantNotFound = (req, res) => {
     res.status(204).send(`Merchant not found.`);
 }

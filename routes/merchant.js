@@ -4,8 +4,10 @@
  */
 const express = require('express');
 let router = express.Router();
-let respondDeals = require('../controllers/respondDeals')
+let merchantController = require('../controllers/merchant-controller.js')
 /* return deals for the given merchant id */
-router.get('/:lookupDomain', respondDeals.getDeals, respondDeals.dealNotFound);
+router.get('/:lookupDomain',
+    merchantController.getMerchant,
+    merchantController.merchantNotFound);
 
 module.exports = router;
