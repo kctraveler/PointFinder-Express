@@ -19,6 +19,6 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/deal', dealRouter);
+app.use('/merchant', dealRouter);
 
 module.exports = app;
