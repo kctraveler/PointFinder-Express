@@ -54,7 +54,7 @@ const _updateMerchants = async (domainList, index) => {
     // Pretty sure this will work
     //(?!www)\b((\w+)\.{0,1})*[0-9a-zA-Z\-]*(?=(\.com|\.org))
     // old [0-9a-zA-Z\-]*(?=(\.com|\.org))
-    const regEx = new RegExp(/(?!www)\b(\w+\.{0,1})[0-9a-zA-Z\-]*(?=(\.com[$/.\*]|\.org[$/.\*]|\.net[$/.\*]))/);
+    const regEx = new RegExp(/(?!www)\b(\w+\.{0,1})[0-9a-zA-Z\-]*(?=(\.com|\.org|\.net))/);
     try {
         // loop through domains in response
         for (let i = 0; i < domains.length; i++) {
@@ -63,7 +63,6 @@ const _updateMerchants = async (domainList, index) => {
                 if (!merch) continue; // skip if the merchant is null
                 const name = merch.name;
                 const match = regEx.exec(merch.domainMatchPattern);
-                console.log(match);
                 let domain = null;
                 if (match) {
                     domain = match[0];
